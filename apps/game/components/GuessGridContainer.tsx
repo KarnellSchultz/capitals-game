@@ -20,16 +20,31 @@ const EmptyGridItem = () => (
   <div className="h-8 col-span-7 bg-slate-200 border-2 rounded"></div>
 );
 
-export const GuessGridContainer = () => {
+type GuessGridContainerProps = {
+  guesses: string[];
+  hintCount: number;
+  isCorrect: boolean;
+};
+export const GuessGridContainer = ({
+  guesses,
+  hintCount,
+  isCorrect,
+}: GuessGridContainerProps) => {
   const gridItemsArray = new Array(6).fill(null);
 
   return (
     <div className="w-full grid gap-1 grid-cols-7 text-center">
       <GuessGridItem guess="hello" hintCount={1} isCorrect={false} />
       <EmptyGridItem />
-      {gridItemsArray.map((_gridItem, idx) => {
-        return <EmptyGridItem key={idx} />;
-        // return <GuessGridItem guess="hello" hintCount={1} isCorrect={false} />;
+      {gridItemsArray.map((guess, idx) => {
+        // return <EmptyGridItem key={idx} />;
+        return (
+          <GuessGridItem
+            guess={guess}
+            hintCount={hintCount}
+            isCorrect={isCorrect}
+          />
+        );
       })}
     </div>
   );
