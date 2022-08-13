@@ -1,3 +1,5 @@
+import { useCapitalGameStore } from "../stores/capitalGameStore";
+
 export type GuessGridItemProps = {
   guess: string;
   hintCount: number;
@@ -20,26 +22,23 @@ const EmptyGridItem = () => (
   <div className="h-8 col-span-7 bg-slate-200 border-2 rounded"></div>
 );
 
-type GuessGridContainerProps = {
-  guesses: string[];
-  hintCount: number;
-  isCorrect: boolean;
-};
-export const GuessGridContainer = ({
-  guesses,
-  hintCount,
-  isCorrect,
-}: GuessGridContainerProps) => {
-  const gridItemsArray = new Array(6).fill(null);
+export const GuessGridContainer = () => {
+  const gameStateSlices = useCapitalGameStore(
+    ({ gameStateSlices }) => gameStateSlices
+  );
+  const gridItemsArray = new Array(6 - gameStateSlices.length).fill(null);
 
+  const guessData = [...gameStateSlices, ...gridItemsArray];
   return (
     <div className="w-full grid gap-1 grid-cols-7 text-center">
-      <GuessGridItem guess="hello" hintCount={1} isCorrect={false} />
-      <EmptyGridItem />
-      {gridItemsArray.map((guess, idx) => {
-        // return <EmptyGridItem key={idx} />;
+      {guessData.map((slice, idx) => {
+        if (slice === null) return <EmptyGridItem key={idx} />;
+
+        const { guess, hintCount, isCorrect } = slice;
+
         return (
           <GuessGridItem
+            key={`${guess}-idx-${hintCount}`}
             guess={guess}
             hintCount={hintCount}
             isCorrect={isCorrect}

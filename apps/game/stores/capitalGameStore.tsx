@@ -11,6 +11,7 @@ export enum GameStatus {
 export type GameStatusType = keyof typeof GameStatus;
 export type GameStateSliceType = {
   guesses: string[];
+  guess: string;
   hintCount: number;
   isCorrect: boolean;
 };
@@ -24,14 +25,13 @@ export type CapitalGameStore = {
   gameStateSlices: GameStateSliceType[];
   incrementHintCount: () => void;
   setGameStateSlices: () => void;
-  setHintCount: () => void;
   setGuessInputValue: (value: string) => void;
   setGameStatus: (gameStatus: GameStatusType) => void;
   setGuesses: (guess: string) => void;
 };
 
 export const useCapitalGameStore = create<CapitalGameStore>((set) => ({
-  country: countries.US,
+  country: countries.JP,
   gameStatus: GameStatus.PLAYING,
   guesses: [],
   guessInputValue: "",
@@ -48,7 +48,12 @@ export const useCapitalGameStore = create<CapitalGameStore>((set) => ({
         ...state,
         gameStateSlices: [
           ...state.gameStateSlices,
-          { guesses: state.guesses, hintCount: state.hintCount, isCorrect },
+          {
+            guesses: state.guesses,
+            hintCount: state.hintCount,
+            isCorrect,
+            guess: state.guessInputValue,
+          },
         ],
       };
     }),

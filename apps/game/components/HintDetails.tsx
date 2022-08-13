@@ -9,7 +9,7 @@ export const HintDetails = () => {
   const percentOfWordShown = Math.round((hintCount / capital.length) * 100);
 
   return (
-    <div className="w-full grid gap-1 grid-cols-7 text-center">
+    <div className="w-full grid gap-1 grid-cols-7 text-center py-1">
       <div className="flex items-center justify-center border-2 h-8 col-span-5 rounded ">
         {hintedWord}
       </div>

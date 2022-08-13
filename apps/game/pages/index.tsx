@@ -18,18 +18,17 @@ export default function Web() {
   const gameStateSlices = useCapitalGameStore(
     ({ gameStateSlices }) => gameStateSlices
   );
-  const setHintCount = useCapitalGameStore(({ setHintCount }) => setHintCount);
-  const [guesses, setGuesses] = useCapitalGameStore(
-    ({ guesses, setGuesses }) => [guesses, setGuesses]
+  const guesses = useCapitalGameStore(({ guesses }) => guesses);
+  const setGuesses = useCapitalGameStore(({ setGuesses }) => setGuesses);
+  const gameStatus = useCapitalGameStore(({ gameStatus }) => gameStatus);
+  const setGameStatus = useCapitalGameStore(
+    ({ setGameStatus }) => setGameStatus
   );
-  const [gameStatus, setGameStatus] = useCapitalGameStore(
-    ({ gameStatus, setGameStatus }) => [gameStatus, setGameStatus]
+  const guessInputValue = useCapitalGameStore(
+    ({ guessInputValue }) => guessInputValue
   );
-  const [guessInputValue, setGuessInputValue] = useCapitalGameStore(
-    ({ guessInputValue, setGuessInputValue }) => [
-      guessInputValue,
-      setGuessInputValue,
-    ]
+  const setGuessInputValue = useCapitalGameStore(
+    ({ setGuessInputValue }) => setGuessInputValue
   );
 
   const isCorrect = guesses.includes(country.capital.toLocaleLowerCase());
@@ -61,8 +60,6 @@ export default function Web() {
     setGuessInputValue("");
   };
 
-  console.log("GUESSES", guesses);
-
   return (
     <div className="flex justify-center items-center flex-col mx-2 text-gray-700">
       <div className="sm:w-1/2 w-full flex justify-center items-center flex-col mx-2 uppercase">
@@ -73,15 +70,11 @@ export default function Web() {
         <h2 className="text-6xl my-4">{country.emoji}</h2>
 
         <HintDetails />
-        <GuessGridContainer
-          guesses={guesses}
-          hintCount={hintCount}
-          isCorrect={false}
-        />
+        <GuessGridContainer />
 
         <form className="w-full" onSubmit={handleGuessSubmit}>
           <input
-            className="w-full shadow appearance-none border border-blue-500
+            className="w-full shadow appearance-none border border-blue-600
           rounded py-2 px-3 my-2 text-gray-700 mb-1 leading-tight
           focus:outline-none focus:shadow-outline"
             type="text"
