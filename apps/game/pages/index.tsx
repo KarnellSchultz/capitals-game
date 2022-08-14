@@ -1,11 +1,12 @@
 import { GuessGridContainer } from "../components/GuessGridContainer";
 import { Nav } from "../components/Nav";
-import { FormEvent, useEffect, useRef } from "react";
-import { GameStatus, useCapitalGameStore } from "../stores/capitalGameStore";
+import { FormEvent, useRef } from "react";
+import { useCapitalGameStore } from "../stores/capitalGameStore";
 import { HintDetails } from "../components/HintDetails";
 
 import { Select } from "@mantine/core";
 import { capitals } from "../constants/capitals";
+import { countries } from "countries-list";
 
 const MAX_GUESSES = 6;
 
@@ -18,15 +19,12 @@ export default function Web() {
   const setGameStateSlices = useCapitalGameStore(
     ({ setGameStateSlices }) => setGameStateSlices
   );
-  const gameStateSlices = useCapitalGameStore(
-    ({ gameStateSlices }) => gameStateSlices
-  );
   const guesses = useCapitalGameStore(({ guesses }) => guesses);
   const setGuesses = useCapitalGameStore(({ setGuesses }) => setGuesses);
   // const gameStatus = useCapitalGameStore(({ gameStatus }) => gameStatus);
-  const setGameStatus = useCapitalGameStore(
-    ({ setGameStatus }) => setGameStatus
-  );
+  // const gameStateSlices = useCapitalGameStore(
+  //   ({ gameStateSlices }) => gameStateSlices
+  // );
 
   const guessCount = guesses.length;
   const hasGuessesRemaining = MAX_GUESSES > guessCount;
