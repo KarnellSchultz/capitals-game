@@ -20,12 +20,10 @@ export type CapitalGameStore = {
   gameStatus: GameStatusType;
   country: Country;
   guesses: string[];
-  guessInputValue: string;
   hintCount: number;
   gameStateSlices: GameStateSliceType[];
   incrementHintCount: () => void;
   setGameStateSlices: () => void;
-  setGuessInputValue: (value: string) => void;
   setGameStatus: (gameStatus: GameStatusType) => void;
   setGuesses: (guess: string) => void;
 };
@@ -34,14 +32,14 @@ export const useCapitalGameStore = create<CapitalGameStore>((set) => ({
   country: countries.JP,
   gameStatus: GameStatus.PLAYING,
   guesses: [],
-  guessInputValue: "",
   hintCount: 0,
   gameStateSlices: [],
   incrementHintCount: () =>
     set((state) => ({ ...state, hintCount: state.hintCount + 1 })),
   setGameStateSlices: () =>
     set((state) => {
-      const currentGuess = [...state.guesses].pop()?.toLocaleLowerCase().trim();
+      const currentGuess =
+        [...state.guesses].pop()?.toLocaleLowerCase().trim() || "";
       const isCorrect =
         currentGuess === state.country.capital.toLocaleLowerCase();
       return {
@@ -52,18 +50,14 @@ export const useCapitalGameStore = create<CapitalGameStore>((set) => ({
             guesses: state.guesses,
             hintCount: state.hintCount,
             isCorrect,
-            guess: state.guessInputValue,
+            guess: currentGuess,
           },
         ],
       };
     }),
   setHintCount: () =>
     set((state) => ({ ...state, hintCount: state.hintCount + 1 })),
-  setGuessInputValue: (value) =>
-    set((state) => ({
-      ...state,
-      guessInputValue: value,
-    })),
+
   setGameStatus: (gameStatus: GameStatusType) =>
     set((state) => ({
       ...state,

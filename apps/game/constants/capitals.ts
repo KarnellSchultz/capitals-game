@@ -107,7 +107,6 @@ export const capitals = [
   "Reykjavik",
   "Rome",
   "Saint Helier",
-  "Kingston",
   "Amman",
   "Tokyo",
   "Nairobi",

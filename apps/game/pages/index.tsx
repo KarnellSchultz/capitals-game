@@ -1,8 +1,11 @@
 import { GuessGridContainer } from "../components/GuessGridContainer";
 import { Nav } from "../components/Nav";
-import { ChangeEvent, FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useRef } from "react";
 import { GameStatus, useCapitalGameStore } from "../stores/capitalGameStore";
 import { HintDetails } from "../components/HintDetails";
+
+import { Select } from "@mantine/core";
+import { capitals } from "../constants/capitals";
 
 const MAX_GUESSES = 6;
 
@@ -20,44 +23,30 @@ export default function Web() {
   );
   const guesses = useCapitalGameStore(({ guesses }) => guesses);
   const setGuesses = useCapitalGameStore(({ setGuesses }) => setGuesses);
-  const gameStatus = useCapitalGameStore(({ gameStatus }) => gameStatus);
+  // const gameStatus = useCapitalGameStore(({ gameStatus }) => gameStatus);
   const setGameStatus = useCapitalGameStore(
     ({ setGameStatus }) => setGameStatus
   );
-  const guessInputValue = useCapitalGameStore(
-    ({ guessInputValue }) => guessInputValue
-  );
-  const setGuessInputValue = useCapitalGameStore(
-    ({ setGuessInputValue }) => setGuessInputValue
-  );
 
+  const guessCount = guesses.length;
+  const hasGuessesRemaining = MAX_GUESSES > guessCount;
   const isCorrect = guesses.includes(country.capital.toLocaleLowerCase());
+  const isLoser = !isCorrect && guessCount === MAX_GUESSES;
+  const gameOver = !hasGuessesRemaining || isCorrect || isLoser;
 
-  useEffect(() => {
-    if (isCorrect) {
-      setGameStatus(GameStatus.COMPLETE);
-    }
-  }, [isCorrect, setGameStatus]);
+  const hasHintsRemaining = country.capital.length <= hintCount;
 
-  const guessCount = new Set([...guesses]).size;
-
-  const isWinner = gameStatus === GameStatus.COMPLETE && isCorrect;
-  const isLoser =
-    gameStatus === GameStatus.COMPLETE &&
-    !isCorrect &&
-    guessCount === MAX_GUESSES;
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setGuessInputValue(e.currentTarget.value);
-  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleGuessSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    setGuesses(guessInputValue);
+    setGuesses(inputRef.current?.value ?? "");
     setGameStateSlices();
-    setGuessInputValue("");
+  };
+
+  const handleGuessClick = () => {
+    setGuesses(inputRef.current?.value ?? "");
+    setGameStateSlices();
   };
 
   return (
@@ -67,30 +56,42 @@ export default function Web() {
         <h2 className="text-6xl my-4 text-center font-bold text-gray-700">
           {country.name}
         </h2>
-        <h2 className="text-6xl my-4">{country.emoji}</h2>
+        <h3 className="text-6xl my-4">{country.emoji}</h3>
 
         <HintDetails />
         <GuessGridContainer />
 
         <form className="w-full" onSubmit={handleGuessSubmit}>
-          <input
-            className="w-full shadow appearance-none border border-blue-600
-          rounded py-2 px-3 my-2 text-gray-700 mb-1 leading-tight
-          focus:outline-none focus:shadow-outline"
-            type="text"
+          <Select
+            ref={inputRef}
+            className="w-full appearance rounded
+            text-gray-700 my-1 leading-tight
+            focus:outline-none focus:shadow-outline"
+            searchable
             placeholder="capital"
-            value={guessInputValue}
-            onChange={handleInputChange}
-          ></input>
+            nothingFound="No capitals"
+            data={[...capitals]}
+            disabled={gameOver}
+          />
         </form>
-        <button className="w-full rounded py-2 px-6 border-2">Guess</button>
         <button
+          className="w-full rounded py-1 px-6 border-2
+          hover:bg-slate-50
+          disabled:bg-slate-300 disabled:cursor-not-allowed"
+          onClick={handleGuessClick}
+          disabled={gameOver}
+        >
+          Guess
+        </button>
+        <button
+          className="w-full rounded py-1 px-6 my-2 border-2 
+          hover:bg-slate-50
+          disabled:bg-slate-300 disabled:cursor-not-allowed"
           onClick={incrementHintCount}
-          className="w-full rounded py-2 px-6 my-2 border-2"
+          disabled={gameOver || hasHintsRemaining}
         >
           Hint
         </button>
-        {gameStatus === GameStatus.COMPLETE && "WOOOTT"}
       </div>
     </div>
   );
