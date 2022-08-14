@@ -29,7 +29,7 @@ export type CapitalGameStore = {
 };
 
 export const useCapitalGameStore = create<CapitalGameStore>((set) => ({
-  country: countries.JP,
+  country: countries.CO,
   gameStatus: GameStatus.PLAYING,
   guesses: [],
   hintCount: 0,
