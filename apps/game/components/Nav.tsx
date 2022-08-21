@@ -1,7 +1,7 @@
 export const Nav = () => {
   return (
     <nav
-      className="h-12 px-2 mt-2 border-b-2 font-bold border-b-slate-200
+      className="h-12 w-full px-2 mt-2 border-b-2 font-bold border-b-slate-200
       flex justify-between items-center "
     >
       <div>🍒</div>
