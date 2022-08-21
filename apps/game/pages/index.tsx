@@ -48,7 +48,7 @@ export default function Web() {
   };
 
   return (
-    <div className="w-screen flex justify-center items-center flex-col mx-2 text-gray-700 ">
+    <div className="flex justify-center items-center flex-col mx-2 text-gray-700 ">
       <div className="flex justify-center items-center flex-col mx-2 uppercase">
         <Nav />
         <h2 className="text-3xl my-4 text-center font-bold text-gray-700">
